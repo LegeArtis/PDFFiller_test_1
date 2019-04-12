@@ -1,52 +1,14 @@
-var params = {
-    lines: [
-        {
-            background: '#00F',
-            updateTime: 1000,
-            elements: [{
-                background: '#79ff18',
-                width: 25
-            },
-                {
-                    background: '#ffef52',
-                    width: 50
-                }
-            ]
-        },
-        {
-            background: '#0BF',
-            updateTime: 1000,
-            elements: [{
-                background: '#fc85ff',
-                width: 25
-            },
-                {
-                    background: '#f4fffc',
-                    width: 50
-                }
-            ]
-        },
-        {
-            background: '#ffd271',
-            updateTime: 1000,
-            elements: [{
-                background: '#ff3f36',
-                width: 25
-            },
-                {
-                    background: '#8ff0ff',
-                    width: 50
-                }
-            ]
-        }
-    ]
-};
+import {params} from 'params';
 
 const width = window.innerWidth;
 const height = window.innerHeight / params.lines.length;
 
 start(params);
 
+/**
+ * function that starts drawing
+ * @param params properties for drawing
+ */
 function start(params) {
     for (let i = 0; i < params.lines.length; i++) {
         const id = 'mainBlock' + i;
@@ -61,6 +23,11 @@ function start(params) {
 
 }
 
+/**
+ * Changes block colors
+ * @param mass it's array with ids of blocks
+ * @param updateTime time between colors change
+ */
 function changeColor(mass, updateTime) {
     setInterval(function () {
         for (let i = 1; i < mass.length ; i++) {
@@ -71,6 +38,12 @@ function changeColor(mass, updateTime) {
 
 }
 
+/**
+ * Returns an array where the [0] element is a part of the html code, and the rest is id of div-blocks
+ * @param elements it's array with properties of div-blocks
+ * @param mainBlock it's ID of the block inside which there are elements
+ * @returns {string[]}
+ */
 function internalBlocks(elements, mainBlock) {
     let back = [``];
 
@@ -84,12 +57,18 @@ function internalBlocks(elements, mainBlock) {
     return back;
 }
 
+/**
+ * Make and return random HTML Color Codes
+ * @returns {string}
+ */
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
+
     for (let i = 0; i < 6; i++) {
         color += letters[Math.floor(Math.random() * 16)];
     }
+
     return color;
 }
 
