@@ -3,16 +3,18 @@ import {params} from 'params';
 const width = window.innerWidth;
 const height = window.innerHeight / params.lines.length;
 
-start(params);
+if (params) {
+    startDrawing(params);
+}
 
 /**
  * function that starts drawing
  * @param params properties for drawing
  */
-function start(params) {
+function startDrawing(params) {
     for (let i = 0; i < params.lines.length; i++) {
         const id = 'mainBlock' + i;
-        const mass = internalBlocks(params.lines[i].elements, id);
+        const mass = internalBlocks(params.lines[i].elements, id) || '';
         mass.push(id);
         document.write(`<div id="${id}" style="background-color: ${params.lines[i].background}; width: ${width}px; height: ${height}px;">
                 ${mass[0]} 
