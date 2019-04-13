@@ -22,10 +22,11 @@ function startDrawing(params) {
             ids.push(block.id);
         });
 
-        document.body.appendChild(div);
+        prev.appendChild(div);
+        changeColor(ids, current.updateTime);
 
-        changeColor(ids, current.updateTime)
-    }, 0);
+        return prev;
+    }, document.body);
 }
 
 /**
@@ -127,3 +128,4 @@ window.onload = function () {
     height = 100 / params.lines.length;
     startDrawing(params);
 };
+
