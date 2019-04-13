@@ -1,7 +1,7 @@
 import {params} from 'params';
 
-const height = window.innerHeight / params.lines.length;
 
+const height = window.innerHeight / params.lines.length;
 startDrawing(params);
 
 
@@ -14,13 +14,23 @@ function startDrawing(params) {
 
     for (let i = 0; i < params.lines.length; i++) {
         const id = 'mainBlock' + i;
-        const props = internalBlocks(params.lines[i].elements, id);
-        props.ids.push(id);
-        document.write(`<div id="${id}" style="background-color: ${params.lines[i].background}; width: ${width}px; height: ${height}px;">
-                ${props.htmlText} 
-            </div>`);
+        const blocks = internalBlocks(params.lines[i].elements, id);
+        const ids = [id];
+        const div = document.createElement('div');
 
-        changeColor(props.ids, params.lines[i].updateTime);
+        div.id = id;
+        div.style.width = width +'px';
+        div.style.height = height +'px';
+        div.style.backgroundColor = params.lines[i].background;
+
+        blocks.forEach(block => {
+            div.appendChild(block);
+            ids.push(block.id);
+        });
+
+        document.body.appendChild(div);
+
+        changeColor(ids, params.lines[i].updateTime)
     }
 
 }
@@ -41,25 +51,27 @@ function changeColor(ids, updateTime) {
 }
 
 /**
- * Returns an array where the [0] element is a part of the html code, and the rest is id of div-blocks
+ * Returns an array with div elements
  * @param elements it's array with properties of div-blocks
  * @param mainBlock it's ID of the block inside which there are elements
- * @returns {{ids: Array, htmlText: string}}
+ * @returns {Array}
  */
 function internalBlocks(elements, mainBlock) {
-    const props = {
-        htmlText: '',
-        ids: []
-    };
+    let blocks = [];
 
     for (let i = 0; i < elements.length; i++) {
         const id = mainBlock + 'internalBlock' + i;
-        const block = `<div id="${id}" style="background-color: ${elements[i].background}; width: ${elements[i].width}%; height: ${height}px; margin: 0; display: inline-block;"></div>`;
-        props.htmlText += block;
-        props.ids.push(id);
-    }
+        const div = document.createElement('div');
 
-    return props;
+        div.id = id;
+        div.style.backgroundColor = elements[i].background;
+        div.style.height = height + 'px';
+        div.style.width = elements[i].width + '%';
+        div.style.display = 'inline-block';
+
+        blocks.push(div);
+    }
+    return blocks;
 }
 
 /**
