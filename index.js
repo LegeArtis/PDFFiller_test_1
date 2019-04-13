@@ -1,4 +1,4 @@
-const params = {
+var params = {
     lines: [
         {
             background: '#00F',
@@ -42,28 +42,26 @@ const params = {
     ]
 };
 
-
-const height = window.innerHeight / params.lines.length;
-startDrawing(params);
-
+const height = 100 / params.lines.length;
+window.onload = function () {
+    startDrawing(params);
+};
 
 /**
  * function that starts drawing
  * @param params properties for drawing
  */
 function startDrawing(params) {
-    const width = window.innerWidth;
-
-    for (let i = 0; i < params.lines.length; i++) {
-        const id = 'mainBlock' + i;
-        const blocks = internalBlocks(params.lines[i].elements, id);
+    params.lines.reduce(function (prev, current, index) {
+        const id = 'mainBlock' + index;
+        const blocks = internalBlocks(current.elements, id);
         const ids = [id];
         const div = document.createElement('div');
 
         div.id = id;
-        div.style.width = width +'px';
-        div.style.height = height +'px';
-        div.style.backgroundColor = params.lines[i].background;
+        div.style.width = '100%';
+        div.style.height = height + '%';
+        div.style.backgroundColor = current.background;
 
         blocks.forEach(block => {
             div.appendChild(block);
@@ -72,9 +70,8 @@ function startDrawing(params) {
 
         document.body.appendChild(div);
 
-        changeColor(ids, params.lines[i].updateTime)
-    }
-
+        changeColor(ids, current.updateTime)
+    }, 0);
 }
 
 /**
@@ -84,12 +81,10 @@ function startDrawing(params) {
  */
 function changeColor(ids, updateTime) {
     setInterval(function () {
-        for (let i = 0; i < ids.length ; i++) {
-            document.getElementById(ids[i]).style.backgroundColor = getRandomColor();
-        }
+        ids.forEach(id => {
+            document.getElementById(id).style.backgroundColor = getRandomColor();
+        })
     }, updateTime);
-
-
 }
 
 /**
@@ -107,7 +102,7 @@ function internalBlocks(elements, mainBlock) {
 
         div.id = id;
         div.style.backgroundColor = elements[i].background;
-        div.style.height = height + 'px';
+        div.style.height = '100%';
         div.style.width = elements[i].width + '%';
         div.style.display = 'inline-block';
 
