@@ -1,6 +1,5 @@
 import {params} from 'params';
 
-const width = window.innerWidth;
 const height = window.innerHeight / params.lines.length;
 
 if (params) {
@@ -12,28 +11,30 @@ if (params) {
  * @param params properties for drawing
  */
 function startDrawing(params) {
+    const width = window.innerWidth;
+
     for (let i = 0; i < params.lines.length; i++) {
         const id = 'mainBlock' + i;
-        const mass = internalBlocks(params.lines[i].elements, id) || '';
-        mass.push(id);
+        const props = internalBlocks(params.lines[i].elements, id);
+        props.ids.push(id);
         document.write(`<div id="${id}" style="background-color: ${params.lines[i].background}; width: ${width}px; height: ${height}px;">
-                ${mass[0]} 
+                ${props.htmlText} 
             </div>`);
 
-        changeColor(mass, params.lines[i].updateTime);
+        changeColor(props.ids, params.lines[i].updateTime);
     }
 
 }
 
 /**
  * Changes block colors
- * @param mass it's array with ids of blocks
+ * @param ids it's array with ids of blocks
  * @param updateTime time between colors change
  */
-function changeColor(mass, updateTime) {
+function changeColor(ids, updateTime) {
     setInterval(function () {
-        for (let i = 1; i < mass.length ; i++) {
-            document.getElementById(mass[i]).style.backgroundColor = getRandomColor();
+        for (let i = 0; i < ids.length ; i++) {
+            document.getElementById(ids[i]).style.backgroundColor = getRandomColor();
         }
     }, updateTime);
 
@@ -44,19 +45,22 @@ function changeColor(mass, updateTime) {
  * Returns an array where the [0] element is a part of the html code, and the rest is id of div-blocks
  * @param elements it's array with properties of div-blocks
  * @param mainBlock it's ID of the block inside which there are elements
- * @returns {string[]}
+ * @returns {{ids: Array, htmlText: string}}
  */
 function internalBlocks(elements, mainBlock) {
-    let back = [``];
+    const props = {
+        htmlText: '',
+        ids: []
+    };
 
     for (let i = 0; i < elements.length; i++) {
-        let id = mainBlock + 'internalBlock' + i;
-        let block = `<div id="${id}" style="background-color: ${elements[i].background}; width: ${elements[i].width}%; height: ${height}px; margin: 0; display: inline-block;"></div>`;
-        back[0] += block;
-        back.push(id)
+        const id = mainBlock + 'internalBlock' + i;
+        const block = `<div id="${id}" style="background-color: ${elements[i].background}; width: ${elements[i].width}%; height: ${height}px; margin: 0; display: inline-block;"></div>`;
+        props.htmlText += block;
+        props.ids.push(id);
     }
 
-    return back;
+    return props;
 }
 
 /**
