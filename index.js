@@ -2,9 +2,8 @@ import {params} from 'params';
 
 const height = window.innerHeight / params.lines.length;
 
-if (params) {
-    startDrawing(params);
-}
+startDrawing(params);
+
 
 /**
  * function that starts drawing
